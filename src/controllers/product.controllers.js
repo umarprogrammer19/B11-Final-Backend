@@ -24,3 +24,29 @@ export const addProduct = async (req, res) => {
         res.status(500).json({ message: "An error occurred" });
     }
 };
+
+export const getProducts = async (req, res) => {
+    try {
+        // Get query parameters for pagination
+        const page = parseInt(req.query.page, 10) || 1; 
+        const limit = parseInt(req.query.limit, 10) || 10;
+
+        const skip = (page - 1) * limit; 
+        const products = await productsModels.find()
+            .skip(skip)
+            .limit(limit);
+
+        const totalProducts = await productsModels.countDocuments();
+
+        res.status(200).json({
+            currentPage: page,
+            totalPages: Math.ceil(totalProducts / limit),
+            totalProducts,
+            products,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
