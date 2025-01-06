@@ -15,11 +15,11 @@ const generateRefreshToken = (user) => {
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
+    host: 'smtp.gmail.com',
     port: 587,
     auth: {
-        user: 'makenna.mohr0@ethereal.email',
-        pass: 'bbufvNSdZMJtXMMrUU'
+        user: process.env.EMAIL,
+        pass: process.env.SMTP_SECRET
     }
 });
 
@@ -35,11 +35,11 @@ export const signUp = async (req, res) => {
 
         await usersModels.create({ fullname, email, password });
         await transporter.sendMail({
-            from: '"Umar Farooq👻" <vernie11@ethereal.email>',
-            to: "umarofficial0121@gmail.com",
-            subject: "Hello Umar✔",
-            text: "Successfully Learn nodemailer",
-            html: "<b>Hello world ?</b>",
+            from: '"Umar Farooq 👻"',
+            to: `${email}, ${process.env.EMAIL}`,
+            subject: `Registration`,
+            text: `Hello ${fullname} You Have Successfully Registered To Our ECommerce Stor`,
+            html: `<br>Welcome ${fullname} <br/>We're thrilled to have you here. Explore, connect, and enjoy a seamless experience tailored just for you. If you need assistance, our team is here to help. Let's make great things happen together!</b> `,
         });
 
         res.status(200).json({ message: "user register successfully" })
