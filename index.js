@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import connectdb from "./src/db/index.js";
+import authRouter from "./src/routes/auth.routes.js"
 
 const app = express();
 
@@ -12,6 +13,7 @@ const corsOption = {
 
 app.use(express.json());
 app.use(cors(corsOption));
+app.use("/api/v1", authRouter);
 
 app.get("/", (req, res) => {
     res.send("<h1>SMIT FINAL BACKEND</h1>");
