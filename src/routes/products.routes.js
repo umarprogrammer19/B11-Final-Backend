@@ -9,8 +9,8 @@ const router = express.Router();
 router.post("/addProducts", authenticate, upload.single("image"), addProduct);
 router.get("/products", getProducts);
 router.get("/products/:id", getSingleProduct);
-router.put("/updateProduct/:id", upload.single("image"), updateProduct);
-router.delete("/deleteProduct/:id", deleteProduct);
+router.put("/updateProduct/:id", authenticate, upload.single("image"), updateProduct);
+router.delete("/deleteProduct/:id", authenticate, deleteProduct);
 
 
 export default router;

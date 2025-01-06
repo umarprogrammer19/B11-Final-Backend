@@ -66,18 +66,21 @@ export const updateProduct = async (req, res) => {
     const { title, description, price } = req.body;
 
     if (!id) return res.status(400).json({ message: "id is required" });
-    // if (!req.user) return res.status(401).json({ message: "Login First" });
+    if (!req.user) return res.status(401).json({ message: "Login First" });
 
     try {
-        const image = await uploadImageToCloudinary(req.file.path);
-        if (!image) return res.status(404).json({ message: "Image Error" });
+        let image;
+        if (req.file) {
+            image = await uploadImageToCloudinary(req.file.path);
+            if (!image) return res.status(404).json({ message: "Image Error" });
+        }
         const product = await productsModels.findById(id);
         if (!product) return res.status(404).json({ message: "Product not found" });
 
         // Check if the logged-in user is the owner of the product
-        // if (product.user.toString() !== req.user._id.toString()) {
-        //     return res.status(403).json({ message: "You are not authorized to update this product" });
-        // }
+        if (product.userRef.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "You are not authorized to update this product" });
+        }
 
         // Update the product fields
         product.title = title || product.title;
@@ -97,18 +100,22 @@ export const deleteProduct = async (req, res) => {
     const { id } = req.params;
 
     if (!id) return res.status(400).json({ message: "id is required" });
-    // if (!req.user) return res.status(401).json({ message: "Login First" });
+    // Check if the logged-in user is the owner of the product
+    if (!req.user) return res.status(401).json({ message: "Login First" });
 
     try {
-        // Check if the logged-in user is the owner of the product
-        // if (product.user.toString() !== req.user._id.toString()) {
-        //     return res.status(403).json({ message: "You are not authorized to delete this product" });
-        // }
+        const isProduct = await productsModels.findById(id);
+        console.log(isProduct);
+
+        if (!isProduct) return res.status(404).json({ message: "Product not found" });
+
+        if (isProduct.userRef.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "You are not authorized to delete this product" });
+        }
+
         const product = await productsModels.findByIdAndDelete(id);
-        if (!product) return res.status(404).json({ message: "Product not found" });
 
-
-        res.status(200).json({ message: "Product deleted successfully" });
+        res.status(200).json({ message: "Product deleted successfully", product });
     } catch (error) {
         console.error("Error occurred:", error);
         res.status(500).json({ message: "An error occurred" });
