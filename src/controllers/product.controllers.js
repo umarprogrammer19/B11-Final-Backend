@@ -28,10 +28,10 @@ export const addProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
     try {
         // Get query parameters for pagination
-        const page = parseInt(req.query.page, 10) || 1; 
+        const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
 
-        const skip = (page - 1) * limit; 
+        const skip = (page - 1) * limit;
         const products = await productsModels.find()
             .skip(skip)
             .limit(limit);
@@ -50,3 +50,13 @@ export const getProducts = async (req, res) => {
     }
 };
 
+export const getSingleProduct = async (req, res) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "id is required" })
+    try {
+        const product = await productsModels.findById(id)
+        res.status(200).json({ message: "Success", product })
+    } catch (error) {
+        console.log("code error", error);
+    }
+}
