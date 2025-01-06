@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
     res.send("<h1>SMIT FINAL BACKEND</h1>");
 });
 
+// Database Connection
 connectdb()
     .then(() => {
         app.listen(process.env.PORT, () => {
