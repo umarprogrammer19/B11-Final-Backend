@@ -11,7 +11,7 @@ export const addProduct = async (req, res) => {
     if (!description) return res.status(400).json({ message: "Description is required" });
     if (!price) return res.status(400).json({ message: "Price is required" });
     if (!req.file) return res.status(400).json({ message: "Please upload an image" });
-    if (!req.user) return res.status(401).json({ message: "Login First" });
+    // if (!req.user) return res.status(401).json({ message: "Login First" });
     try {
         const imageURL = await uploadImageToCloudinary(req.file.path);
         if (!imageURL) {
@@ -59,4 +59,58 @@ export const getSingleProduct = async (req, res) => {
     } catch (error) {
         console.log("code error", error);
     }
-}
+};
+
+export const updateProduct = async (req, res) => {
+    const { id } = req.params;
+    const { title, description, price } = req.body;
+
+    if (!id) return res.status(400).json({ message: "id is required" });
+    // if (!req.user) return res.status(401).json({ message: "Login First" });
+
+    try {
+        const image = await uploadImageToCloudinary(req.file.path);
+        if (!image) return res.status(404).json({ message: "Image Error" });
+        const product = await productsModels.findById(id);
+        if (!product) return res.status(404).json({ message: "Product not found" });
+
+        // Check if the logged-in user is the owner of the product
+        // if (product.user.toString() !== req.user._id.toString()) {
+        //     return res.status(403).json({ message: "You are not authorized to update this product" });
+        // }
+
+        // Update the product fields
+        product.title = title || product.title;
+        product.description = description || product.description;
+        product.price = price || product.price;
+        product.imageURL = image || product.imageURL;
+
+        await product.save();
+        res.status(200).json({ message: "Product updated successfully", product });
+    } catch (error) {
+        console.error("Error occurred:", error);
+        res.status(500).json({ message: "An error occurred" });
+    }
+};
+
+export const deleteProduct = async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) return res.status(400).json({ message: "id is required" });
+    // if (!req.user) return res.status(401).json({ message: "Login First" });
+
+    try {
+        // Check if the logged-in user is the owner of the product
+        // if (product.user.toString() !== req.user._id.toString()) {
+        //     return res.status(403).json({ message: "You are not authorized to delete this product" });
+        // }
+        const product = await productsModels.findByIdAndDelete(id);
+        if (!product) return res.status(404).json({ message: "Product not found" });
+
+
+        res.status(200).json({ message: "Product deleted successfully" });
+    } catch (error) {
+        console.error("Error occurred:", error);
+        res.status(500).json({ message: "An error occurred" });
+    }
+};
