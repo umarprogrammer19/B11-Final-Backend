@@ -20,7 +20,7 @@ const productSchema = mongoose.Schema({
     },
     userRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
+        ref: 'users',
     },
     orderItems: [{
         type: mongoose.Schema.Types.ObjectId,

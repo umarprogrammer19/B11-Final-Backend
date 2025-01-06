@@ -2,8 +2,9 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import connectdb from "./src/db/index.js";
-import authRouter from "./src/routes/auth.routes.js"
-import productRouter from "./src/routes/products.routes.js"
+import authRouter from "./src/routes/auth.routes.js";
+import productRouter from "./src/routes/products.routes.js";
+import orderRouter from "./src/routes/orders.routes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cors(corsOption));
 app.use("/api/v1", authRouter);
 app.use("/api/v2", productRouter);
+app.use("/api/v3", orderRouter);
 
 app.get("/", (req, res) => {
     res.send("<h1>SMIT FINAL BACKEND</h1>");
