@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
+import productsModels from "./products.models.js";
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -22,11 +23,11 @@ const userSchema = new mongoose.Schema({
     },
     products: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "products",
     }],
     orders: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
+        ref: 'orders',
     }],
 }, { timestamps: true })
 

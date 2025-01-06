@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import usersModels from "./users.models.js";
 
 const productSchema = mongoose.Schema({
     title: {
@@ -16,13 +15,13 @@ const productSchema = mongoose.Schema({
     },
     userRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: usersModels,
+        ref: "users",
     },
     orderItems: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
+        ref: 'orders',
     }],
 
 }, { timestamps: true })
 
-export default mongoose.model('Products', productSchema);
+export default mongoose.model('products', productSchema);
