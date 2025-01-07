@@ -39,7 +39,6 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
     try {
         const userId = req.user._id;
-        // const userId = "677b61a45acdcc4601cd0d68"
 
         // Fetch orders for the authenticated user
         const orders = await orderModels.find({ user: userId })
