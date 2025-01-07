@@ -6,17 +6,40 @@ const swaggerOptions = {
         info: {
             title: "SMIT Final Backend API",
             version: "1.0.0",
-            description: "API documentation for SMIT Final Backend",
+            description: "Comprehensive API documentation for SMIT Final Backend project.",
+            contact: {
+                name: "Developer Support",
+                email: "support@smitbackend.com",
+            },
         },
         servers: [
             {
                 url: "http://localhost:8080",
                 description: "Development server",
             },
+            {
+                url: "https://api.productiondomain.com",
+                description: "Production server",
+            },
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
         ],
     },
-    apis: ["./src/routes/*.js"], // Path to your API route files
+    apis: ["./src/routes/*.js", "./src/controllers/*.js"], 
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 export default swaggerDocs;
