@@ -5,7 +5,9 @@ import mongoose from "mongoose";
 
 export const createOrder = async (req, res) => {
     try {
-        const { userId, products } = req.body;
+        const { products } = req.body;
+        if (!req.user) return res.status(404).json({ message: "Unauthorized" });
+        const userId = req.user._id;
         const user = await usersModels.findById(userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -59,12 +61,11 @@ export const getOneOrder = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Validate the order ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid order ID' });
         }
 
-        const order = await orderModels.findOne({ _id: id})
+        const order = await orderModels.findOne({ _id: id })
             .populate('products', 'name price')
             .populate('user', 'name email');
         if (!order) {
