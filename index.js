@@ -6,7 +6,8 @@ import authRouter from "./src/routes/auth.routes.js";
 import productRouter from "./src/routes/products.routes.js";
 import orderRouter from "./src/routes/orders.routes.js";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocs from "./swaggerConfig.js"; 
+import swaggerDocs from "./swaggerConfig.js";
+import homePageUI from "./src/pages/homePage.js";
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use("/api/v3", orderRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get("/", (req, res) => {
-    res.send("<h1>SMIT FINAL BACKEND</h1>");
+    res.send(homePageUI);
 });
 
 // Database Connection
