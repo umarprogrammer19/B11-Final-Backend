@@ -4,12 +4,12 @@ const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "SMIT Final Backend API",
+            title: "SMIT Final E-Commerce Backend API Documentation",
             version: "1.0.0",
             description: "Comprehensive API documentation for SMIT Final Backend project.",
             contact: {
                 name: "Developer Support",
-                email: "support@smitbackend.com",
+                email: process.env.EMAIL,
             },
         },
         servers: [
@@ -18,7 +18,7 @@ const swaggerOptions = {
                 description: "Development server",
             },
             {
-                url: "https://api.productiondomain.com",
+                url: "https://prospective-christal-uf-official-4b28783f.koyeb.app/",
                 description: "Production server",
             },
         ],
@@ -37,7 +37,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ["./src/routes/*.js", "./src/controllers/*.js"], 
+    apis: ["./src/routes/*.js", "./src/controllers/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
