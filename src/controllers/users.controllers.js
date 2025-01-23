@@ -90,7 +90,12 @@ export const getUser = async (req, res) => {
         const userData = await usersModels.findOne({ email });
         res.status(200).json({
             message: "Successfully Get The User",
-            userData,
+            user: {
+                id: userData._id,
+                fullname: userData.fullname,
+                email: userData.email,
+                orders: userData.orders
+            },
         });
     } catch (error) {
         console.log(error);
