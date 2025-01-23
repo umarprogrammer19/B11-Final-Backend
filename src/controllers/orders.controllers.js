@@ -42,8 +42,8 @@ export const getOrders = async (req, res) => {
 
         // Fetch orders for the authenticated user
         const orders = await orderModels.find({ user: userId })
-            .populate('products', 'name price')
-            .populate('user', 'name email')
+            .populate('products')
+            .populate('user', '_id fullname email')
             .sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -66,7 +66,7 @@ export const getOneOrder = async (req, res) => {
 
         const order = await orderModels.findOne({ _id: id })
             .populate('products', 'name price')
-            .populate('user', 'name email');
+            .populate('user', 'fullname email');
         if (!order) {
             return res.status(404).json({ error: 'Order not found or access denied' });
         }

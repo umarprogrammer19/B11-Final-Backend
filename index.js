@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import "dotenv/config";
 import cors from "cors";
 import connectdb from "./src/db/index.js";
@@ -8,6 +8,7 @@ import orderRouter from "./src/routes/orders.routes.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./swaggerConfig.js";
 import homePageUI from "./src/pages/homePage.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -17,7 +18,9 @@ const corsOption = {
 };
 
 app.use(express.json());
+app.use((urlencoded({ extended: false })));
 app.use(cors(corsOption));
+app.use(cookieParser());
 app.use("/api/v1", authRouter);
 app.use("/api/v2", productRouter);
 app.use("/api/v3", orderRouter);
