@@ -82,3 +82,18 @@ export const signIn = async (req, res) => {
         res.status(500).json({ message: "An error occurred during Login" });
     }
 }
+
+export const getUser = async (req, res) => {
+    if (!req.user) return res.status(404).json({ message: "Please Login First" });
+    try {
+        const { email } = req.user;
+        const userData = usersModels.findOne({ email });
+        res.status(200).json({
+            message: "Successfully Get The User",
+            userData,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "An error occurred" });
+    }
+}
