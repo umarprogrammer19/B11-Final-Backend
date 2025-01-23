@@ -1,6 +1,7 @@
 import express from "express";
-import { signIn, signUp } from "../controllers/users.controllers.js";
+import { getUser, signIn, signUp } from "../controllers/users.controllers.js";
 import { authenticateUser } from "../middleware/auth.middleware.js";
+import { authenticate } from "../middleware/userRef.middleware.js";
 
 const router = express.Router();
 
@@ -108,5 +109,7 @@ router.post("/login", signIn);
 router.get("/verifyUser", authenticateUser, (req, res) => {
     res.json({ message: "Hey! You Are Logged In", user: req.user });
 });
+
+router.get("/getUser", authenticate, getUser);
 
 export default router;

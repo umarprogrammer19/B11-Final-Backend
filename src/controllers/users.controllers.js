@@ -87,7 +87,7 @@ export const getUser = async (req, res) => {
     if (!req.user) return res.status(404).json({ message: "Please Login First" });
     try {
         const { email } = req.user;
-        const userData = usersModels.findOne({ email });
+        const userData = await usersModels.findOne({ email });
         res.status(200).json({
             message: "Successfully Get The User",
             userData,
