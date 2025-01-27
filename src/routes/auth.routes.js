@@ -110,6 +110,62 @@ router.get("/verifyUser", authenticateUser, (req, res) => {
     res.json({ message: "Hey! You Are Logged In", user: req.user });
 });
 
+/**
+ * @swagger
+ * /api/v1/getUser:
+ *   get:
+ *     summary: Retrieve the authenticated user's details
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Successfully Get The User
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 63f24d918b8eaa0c12345678
+ *                     fullname:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       example: johndoe@example.com
+ *                     orders:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           orderId:
+ *                             type: string
+ *                             example: 63f24d918b8eaa0c12345678
+ *                           totalPrice:
+ *                             type: number
+ *                             example: 2500
+ *                           status:
+ *                             type: string
+ *                             example: pending
+ *       401:
+ *         description: Unauthorized - User not logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Please Login First
+ */
 router.get("/getUser", authenticate, getUser);
 
 export default router;
