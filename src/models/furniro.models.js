@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema({
+const furniroOrders = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
         required: true,
     },
     products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
+        type: mongoose.Schema.Types.Mixed,
         required: true,
     }],
     totalPrice: {
@@ -29,4 +28,4 @@ const orderSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-export default mongoose.model('orders', orderSchema);
+export default mongoose.model('furniroOrders', furniroOrders);
