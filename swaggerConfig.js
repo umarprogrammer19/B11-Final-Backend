@@ -4,9 +4,9 @@ const swaggerOptions = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "SMIT Final E-Commerce Backend API Documentation",
+            title: "Final E-Commerce Backend API Documentation",
             version: "1.0.0",
-            description: "Comprehensive API documentation for SMIT Final Backend project.",
+            description: "Comprehensive API documentation for Ecommerce Final Backend project.",
             contact: {
                 name: "Developer Support",
                 email: process.env.EMAIL,
@@ -18,7 +18,7 @@ const swaggerOptions = {
                 description: "Development server",
             },
             {
-                url: "https://prospective-christal-uf-official-4b28783f.koyeb.app/",
+                url: "https://api-uf-official-ecommerce.koyeb.app/",
                 description: "Production server",
             },
         ],
