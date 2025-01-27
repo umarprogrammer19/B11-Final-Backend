@@ -1,7 +1,7 @@
 import express from "express";
 import { createOrder, getOneOrder, getOrders } from "../controllers/orders.controllers.js";
 import { authenticate } from "../middleware/userRef.middleware.js";
-import { createOrderFromFurniro } from "../controllers/furniro.controllers.js";
+import { createOrderFromFurniro, getOrdersFromFurniro } from "../controllers/furniro.controllers.js";
 
 const router = express.Router();
 
@@ -206,6 +206,7 @@ router.post("/furniro-orders", authenticate, createOrderFromFurniro);
  *         description: Internal server error.
  */
 router.get("/orders", authenticate, getOrders);
+router.get("/furniro-orders", authenticate, getOrdersFromFurniro);
 
 /**
  * @swagger
