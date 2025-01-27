@@ -7,8 +7,7 @@ const orderSchema = new mongoose.Schema({
         required: true,
     },
     products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "products",
+        type: mongoose.Schema.Types.Mixed,
         required: true,
     }],
     totalPrice: {
@@ -30,3 +29,5 @@ const orderSchema = new mongoose.Schema({
 });
 
 export default mongoose.model('orders', orderSchema);
+// type: mongoose.Schema.Types.ObjectId,
+//         ref: "products",
