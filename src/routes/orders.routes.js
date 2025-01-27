@@ -1,6 +1,7 @@
 import express from "express";
 import { createOrder, getOneOrder, getOrders } from "../controllers/orders.controllers.js";
 import { authenticate } from "../middleware/userRef.middleware.js";
+import { createOrderFromFurniro } from "../controllers/furniro.controllers.js";
 
 const router = express.Router();
 
@@ -65,6 +66,7 @@ const router = express.Router();
  *         description: Internal server error.
  */
 router.post("/orders", authenticate, createOrder);
+router.post("/furniro-orders", authenticate, createOrderFromFurniro);
 
 /**
  * @swagger
