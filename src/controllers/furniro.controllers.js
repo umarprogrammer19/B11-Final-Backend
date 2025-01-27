@@ -1,4 +1,6 @@
 import furniroModels from "../models/furniro.models.js";
+import usersModels from "../models/users.models.js";
+import { generateOrderHistoryHTML } from "../pages/orderEmailFormat.js";
 import { transporter } from "./users.controllers.js";
 
 export const createOrderFromFurniro = async (req, res) => {
@@ -37,13 +39,14 @@ export const createOrderFromFurniro = async (req, res) => {
 
         await newOrder.save();
 
-        transporter.sendMail({
-            from: '"Umar Farooq 👻"',
+        const htmlContent = generateOrderHistoryHTML(user, [newOrder]);
+
+        await transporter.sendMail({
+            from: '"UF E-Commerce Store"',
             to: `${req.user.email}, ${process.env.EMAIL}`,
-            subject: `Registration`,
-            text: `Hello ${req.user.fullname} You Have Successfully Registered To Our ECommerce Stor`,
-            html: `<br>Welcome ${req.user.fullname} <br/>We're thrilled to have you here. Explore, connect, and enjoy a seamless experience tailored just for you. If you need assistance, our team is here to help. Let's make great things happen together!</b> `,
-        })
+            subject: "Your Order History from Furniro",
+            html: htmlContent,
+        });
 
         res.status(201).json({
             message: "Order placed successfully",
