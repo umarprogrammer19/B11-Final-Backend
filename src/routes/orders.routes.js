@@ -206,6 +206,89 @@ router.post("/furniro-orders", authenticate, createOrderFromFurniro);
  *         description: Internal server error.
  */
 router.get("/orders", authenticate, getOrders);
+
+/**
+ * @swagger
+ * /api/v3/furniro-orders:
+ *   get:
+ *     summary: Retrieve orders for the authenticated user
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved orders for the authenticated user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Orders retrieved successfully
+ *                 orders:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                         example: 64a7a7d7e9f123456789abcd
+ *                       user:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                             example: 64a7a7d7e9f123456789abcd
+ *                           fullname:
+ *                             type: string
+ *                             example: John Doe
+ *                           email:
+ *                             type: string
+ *                             example: johndoe@example.com
+ *                       products:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             name:
+ *                               type: string
+ *                               example: Chair
+ *                             price:
+ *                               type: number
+ *                               example: 2500
+ *                             quantity:
+ *                               type: number
+ *                               example: 2
+ *                       totalPrice:
+ *                         type: number
+ *                         example: 5000
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: 2025-01-01T12:00:00.000Z
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unauthorized
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
+ */
+
 router.get("/furniro-orders", authenticate, getOrdersFromFurniro);
 
 /**
