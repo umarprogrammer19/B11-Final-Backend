@@ -66,6 +66,121 @@ const router = express.Router();
  *         description: Internal server error.
  */
 router.post("/orders", authenticate, createOrder);
+
+/**
+ * @swagger
+ * /api/v3/furniro-orders:
+ *   post:
+ *     summary: Create a new order for Furniro
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - products
+ *               - totalPrice
+ *             properties:
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: Chair
+ *                     price:
+ *                       type: number
+ *                       example: 2500
+ *                     quantity:
+ *                       type: number
+ *                       example: 2
+ *               totalPrice:
+ *                 type: number
+ *                 example: 5000
+ *     responses:
+ *       201:
+ *         description: Order placed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Order placed successfully
+ *                 order:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: 64a7a7d7e9f123456789abcd
+ *                     user:
+ *                       type: string
+ *                       example: 64a7a7d7e9f123456789abcd
+ *                     products:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                             example: Chair
+ *                           price:
+ *                             type: number
+ *                             example: 2500
+ *                           quantity:
+ *                             type: number
+ *                             example: 2
+ *                     totalPrice:
+ *                       type: number
+ *                       example: 5000
+ *       400:
+ *         description: Validation error (e.g., invalid or missing fields)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Products array is required and cannot be empty
+ *       401:
+ *         description: Unauthorized - User not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
+ */
+
 router.post("/furniro-orders", authenticate, createOrderFromFurniro);
 
 /**
