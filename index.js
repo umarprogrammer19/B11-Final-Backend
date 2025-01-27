@@ -14,7 +14,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 const corsOption = {
-    origin: "http://localhost:3000",
+    origin: process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000",
     credentials: true,
 };
 
