@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
+// Set Cors For Production 
 const corsOption = {
     origin: process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000",
     credentials: true,
