@@ -93,8 +93,8 @@ export const generateOrderHistoryHTML = (user, orders) => {
                                 <tr>
                                     <td>${product.name}</td>
                                     <td>${product.quantity}</td>
-                                    <td>Rs. ${product.price}</td>
-                                    <td>Rs. ${product.quantity * product.price}</td>
+                                    <td>$${product.price}</td>
+                                    <td>$${product.quantity * product.price}</td>
                                 </tr>
                             `
                         )
