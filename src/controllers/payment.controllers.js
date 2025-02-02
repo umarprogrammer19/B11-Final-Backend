@@ -38,7 +38,7 @@ export const checkout = async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: `${BASE_URL}payment/success`,
+            success_url: `${BASE_URL}/payment/success`,
             cancel_url: `${BASE_URL}/payment/cancel`,
         });
 
