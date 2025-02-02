@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 
+const BASE_URL = process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000";
 let key;
 if (process.env.STRIPE_SECRET) key = process.env.STRIPE_SECRET;
 
@@ -37,8 +38,8 @@ export const checkout = async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: "http://localhost:3000/payment/success",
-            cancel_url: "http://localhost:3000/payment/cancel",
+            success_url: `${BASE_URL}payment/success`,
+            cancel_url: `${BASE_URL}/payment/cancel`,
         });
 
         // Send session ID to the frontend
