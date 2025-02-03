@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 
+// BAse URL For Production And Deployment
 const BASE_URL = process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000";
 let key;
 if (process.env.STRIPE_SECRET) key = process.env.STRIPE_SECRET;
