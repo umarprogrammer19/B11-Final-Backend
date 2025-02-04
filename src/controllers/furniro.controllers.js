@@ -1,72 +1,7 @@
-
-import Stripe from "stripe";
-import furniroModels from "../models/furniro.models.js"; // Import your order model
-import usersModels from "../models/users.models.js"; // Import user model
+import furniroModels from "../models/furniro.models.js";
+import usersModels from "../models/users.models.js";
 import { generateOrderHistoryHTML } from "../pages/orderEmailFormat.js";
-import dotenv from "dotenv";
 import { transporter } from "./users.controllers.js";
-
-dotenv.config();
-
-const stripe = new Stripe(process.env.STRIPE_SECRET);
-
-export const webhook = async (req, res) => {
-    const sig = req.headers["stripe-signature"];
-    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-    let event;
-    try {
-        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-    } catch (err) {
-        console.error("⚠️ Webhook signature verification failed.", err.message);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    // Handle the checkout.session.completed event
-    if (event.type === "checkout.session.completed") {
-        const session = event.data.object;
-
-        try {
-            const products = JSON.parse(session.metadata.products);
-            const totalPrice = session.amount_total / 100; // Stripe sends amount in cents
-            const userId = session.metadata.userId;
-
-            // Validate user
-            const user = await usersModels.findById(userId);
-            if (!user) {
-                console.error("❌ User not found:", userId);
-                return res.status(404).json({ error: "User not found" });
-            }
-
-            // Create order in the database
-            const newOrder = new furniroModels({
-                user: userId,
-                products,
-                totalPrice,
-                status: "completed",
-            });
-
-            await newOrder.save();
-
-            // Send email confirmation
-            const htmlContent = generateOrderHistoryHTML(user, [newOrder]);
-            await transporter.sendMail({
-                from: '"UF E-Commerce Store"',
-                to: `${user.email}, ${process.env.EMAIL}`,
-                subject: "Your Order History from Furniro",
-                html: htmlContent,
-            });
-
-            console.log("✅ Order successfully created after payment!");
-            return res.status(200).json({ received: true });
-        } catch (error) {
-            console.error("❌ Error creating order after payment:", error);
-            return res.status(500).json({ error: "Failed to create order." });
-        }
-    }
-
-    res.status(200).json({ received: true });
-};
 
 export const createOrderFromFurniro = async (req, res) => {
     try {
@@ -99,7 +34,7 @@ export const createOrderFromFurniro = async (req, res) => {
         const newOrder = new furniroModels({
             user: userId,
             products,
-            totalPrice,
+            totalPrice: Number(totalPrice),
         });
 
         await newOrder.save();

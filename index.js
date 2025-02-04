@@ -1,16 +1,15 @@
-import express, { urlencoded } from "express";
-import "dotenv/config";
-import cors from "cors";
-import connectdb from "./src/db/index.js";
-import authRouter from "./src/routes/auth.routes.js";
-import productRouter from "./src/routes/products.routes.js";
-import orderRouter from "./src/routes/orders.routes.js";
-import checkoutRouter from "./src/routes/checkout.routes.js"
-import webHookRouter from "./src/routes/webhook.routes.js"
-import swaggerUi from "swagger-ui-express";
-import swaggerDocs from "./swaggerConfig.js";
-import homePageUI from "./src/pages/homePage.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import "dotenv/config";
+import express, { urlencoded } from "express";
+import swaggerUi from "swagger-ui-express";
+import connectdb from "./src/db/index.js";
+import homePageUI from "./src/pages/homePage.js";
+import authRouter from "./src/routes/auth.routes.js";
+import checkoutRouter from "./src/routes/checkout.routes.js";
+import orderRouter from "./src/routes/orders.routes.js";
+import productRouter from "./src/routes/products.routes.js";
+import swaggerDocs from "./swaggerConfig.js";
 
 const app = express();
 
@@ -28,7 +27,6 @@ app.use("/api/v1", authRouter);
 app.use("/api/v2", productRouter);
 app.use("/api/v3", orderRouter);
 app.use("/api/v4", checkoutRouter);
-app.use("/api", webHookRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get("/", (req, res) => {
