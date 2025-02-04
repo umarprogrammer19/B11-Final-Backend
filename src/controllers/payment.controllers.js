@@ -1,22 +1,21 @@
 import Stripe from "stripe";
 
-// BAse URL For Production And Deployment
-const BASE_URL = process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000";
-let key;
-if (process.env.STRIPE_SECRET) key = process.env.STRIPE_SECRET;
+// Define the base URL
+const BASE_URL = process.env.NODE_ENV === "production"
+    ? "https://uf-furniro-store.vercel.app"
+    : "http://localhost:3000";
 
-const stripe = new Stripe(key);
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const checkout = async (req, res) => {
     try {
-        const { products } = req.body;
+        const { products, userId } = req.body;
 
-        // Validate the products array
+        // Validate products
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({ error: "Invalid or empty products array" });
         }
 
-        // Map products to line items for Stripe
         const lineItems = products.map((item) => {
             if (!item.name || !item.price || !item.quantity) {
                 throw new Error("Invalid product data. Each product requires name, price, and quantity.");
@@ -28,22 +27,25 @@ export const checkout = async (req, res) => {
                     product_data: {
                         name: item.name,
                     },
-                    unit_amount: item.price * 100, // Stripe expects amounts in cents
+                    unit_amount: item.price * 100, // Stripe uses cents
                 },
                 quantity: item.quantity,
             };
         });
 
-        // Create Stripe Checkout session
+        // Create a Stripe Checkout session
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
             success_url: `${BASE_URL}/payment/success`,
             cancel_url: `${BASE_URL}/payment/cancel`,
+            metadata: {
+                products: JSON.stringify(products),
+                userId: userId,
+            },
         });
 
-        // Send session ID to the frontend
         res.status(200).json({ id: session.id });
     } catch (error) {
         console.error("Stripe checkout error:", error.message);
