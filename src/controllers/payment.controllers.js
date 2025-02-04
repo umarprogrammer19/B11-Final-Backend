@@ -8,9 +8,9 @@ const BASE_URL = process.env.NODE_ENV === "production"
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const checkout = async (req, res) => {
+    if (!req.user) return res.status(400).json({ message: "Unauthorized" });
     try {
         const { products, userId } = req.body;
-
         // Validate products
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({ error: "Invalid or empty products array" });
@@ -42,7 +42,7 @@ export const checkout = async (req, res) => {
             cancel_url: `${BASE_URL}/payment/cancel`,
             metadata: {
                 products: JSON.stringify(products),
-                userId: userId,
+                userId: req.user._id,
             },
         });
 

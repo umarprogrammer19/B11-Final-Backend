@@ -1,5 +1,6 @@
 import express from "express";
 import { checkout } from "../controllers/payment.controllers.js";
+import { authenticate } from "../middleware/userRef.middleware.js";
 
 const router = express.Router();
 /**
@@ -72,6 +73,6 @@ const router = express.Router();
  *                   example: "Invalid product data. Each product requires name, price, and quantity."
  */
 
-router.post("/checkout", checkout);
+router.post("/checkout", authenticate, checkout);
 
 export default router;
