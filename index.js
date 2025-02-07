@@ -11,6 +11,7 @@ import orderRouter from "./src/routes/orders.routes.js";
 import productRouter from "./src/routes/products.routes.js";
 import contactRouter from "./src/routes/contact.routes.js";
 import swaggerDocs from "./swaggerConfig.js";
+import usersModels from "./src/models/users.models.js";
 
 const app = express();
 
@@ -23,7 +24,7 @@ const allowedOrigins = [
 
 const corsOption = {
     origin: (origin, callback) => {
-        console.log("Received Origin:", origin); 
+        console.log("Received Origin:", origin);
 
         if (!origin) {
             return callback(null, true);
