@@ -9,11 +9,11 @@ export const adminLogin = async (req, res) => {
 
         const user = await usersModels.findOne({ email });
 
-        if (!user) return res.status(404).json({ message: "User Does Not Exists With This Email" });
+        if (!user) return res.status(404).json({ message: "Invalid Email Or Password" });
 
         if (user.role == 'admin') {
             const isTruePassword = await bcrypt.compare(password, user.password);
-            if (!isTruePassword) return res.status(400).json({ message: "Password Is Incorrect" });
+            if (!isTruePassword) return res.status(400).json({ message: "Invalid Email Or Password" });
 
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
