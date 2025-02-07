@@ -7,11 +7,11 @@ import connectdb from "./src/db/index.js";
 import homePageUI from "./src/pages/homePage.js";
 import authRouter from "./src/routes/auth.routes.js";
 import checkoutRouter from "./src/routes/checkout.routes.js";
+import contactRouter from "./src/routes/contact.routes.js";
 import orderRouter from "./src/routes/orders.routes.js";
 import productRouter from "./src/routes/products.routes.js";
-import contactRouter from "./src/routes/contact.routes.js";
 import swaggerDocs from "./swaggerConfig.js";
-import usersModels from "./src/models/users.models.js";
+import adminAuthRouter from "./src/admin/routes/auth.routes.js";
 
 const app = express();
 
@@ -51,6 +51,7 @@ app.use("/api/v2", productRouter);
 app.use("/api/v3", orderRouter);
 app.use("/api/v4", checkoutRouter);
 app.use("/api/v5", contactRouter);
+app.use("/api/admin/auth", adminAuthRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get("/", (req, res) => {
