@@ -14,11 +14,32 @@ import swaggerDocs from "./swaggerConfig.js";
 
 const app = express();
 
-// Set Cors For Production 
+const allowedOrigins = [
+    "https://uf-furniro-store.vercel.app",
+    "https://ui-ux-hackathon-foodtuck-website.vercel.app",
+    "https://uf-food-tuck.vercel.app",
+    "http://localhost:3000"
+];
+
 const corsOption = {
-    origin: process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" || "https://ui-ux-hackathon-foodtuck-website.vercel.app" || "https://uf-food-tuck.vercel.app" : "http://localhost:3000",
+    origin: (origin, callback) => {
+        console.log("Received Origin:", origin); 
+
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.includes(origin)) {
+            console.log("✅ Allowed:", origin);
+            return callback(null, true);
+        } else {
+            console.log("❌ Blocked:", origin);
+            return callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
 };
+
 
 app.use(express.json());
 app.use((urlencoded({ extended: false })));
