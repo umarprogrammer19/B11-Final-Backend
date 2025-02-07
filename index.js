@@ -16,7 +16,7 @@ const app = express();
 
 // Set Cors For Production 
 const corsOption = {
-    origin: process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000",
+    origin: process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" || "https://ui-ux-hackathon-foodtuck-website.vercel.app" || "https://uf-food-tuck.vercel.app" : "http://localhost:3000",
     credentials: true,
 };
 
