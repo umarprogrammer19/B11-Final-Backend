@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { createOrderFromFurniro } from "../utils/order.js";
 
 // BAse URL For Production And Deployment
-const BASE_URL = process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" : "http://localhost:3000";
+const BASE_URL = process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" || "https://ui-ux-hackathon-foodtuck-website.vercel.app" || "https://uf-food-tuck.vercel.app" : "http://localhost:3000";
 let key;
 if (process.env.STRIPE_SECRET) key = process.env.STRIPE_SECRET;
 

@@ -36,7 +36,7 @@ export const createOrderFromFurniro = async (products, totalPrice, userId) => {
         await transporter.sendMail({
             from: '"UF E-Commerce Store"',
             to: `${user.email}, ${process.env.EMAIL}`,
-            subject: "Your Order History from Furniro",
+            subject: "Your Order History from Marketplace",
             html: htmlContent,
         });
 
