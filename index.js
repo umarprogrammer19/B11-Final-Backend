@@ -3,6 +3,8 @@ import cors from "cors";
 import "dotenv/config";
 import express, { urlencoded } from "express";
 import swaggerUi from "swagger-ui-express";
+import adminAuthRouter from "./src/admin/routes/auth.routes.js";
+import adminUserRouter from "./src/admin/routes/user.routes.js";
 import connectdb from "./src/db/index.js";
 import homePageUI from "./src/pages/homePage.js";
 import authRouter from "./src/routes/auth.routes.js";
@@ -11,8 +13,6 @@ import contactRouter from "./src/routes/contact.routes.js";
 import orderRouter from "./src/routes/orders.routes.js";
 import productRouter from "./src/routes/products.routes.js";
 import swaggerDocs from "./swaggerConfig.js";
-import adminAuthRouter from "./src/admin/routes/auth.routes.js";
-import adminUserRouter from "./src/admin/routes/user.routes.js";
 
 const app = express();
 
@@ -56,9 +56,11 @@ app.use("/api/admin/auth", adminAuthRouter);
 app.use("/api/admin", adminUserRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+
 app.get("/", (req, res) => {
     res.send(homePageUI);
 });
+
 
 // Database Connection
 connectdb()
