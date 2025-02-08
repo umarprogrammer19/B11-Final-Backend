@@ -9,7 +9,7 @@ export const getAllOrders = async (req, res) => {
             .skip(skip)
             .limit(limit);
 
-        const totalOrders = await usersModels.countDocuments();
+        const totalOrders = await ordersModels.countDocuments();
         res.status(200).json({
             message: "Order Retrives Successfully",
             currentPage: page,
