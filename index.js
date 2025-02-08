@@ -5,6 +5,7 @@ import express, { urlencoded } from "express";
 import swaggerUi from "swagger-ui-express";
 import adminAuthRouter from "./src/admin/routes/auth.routes.js";
 import adminUserRouter from "./src/admin/routes/user.routes.js";
+import adminOrderRouter from "./src/admin/routes/orders.routes.js";
 import connectdb from "./src/db/index.js";
 import homePageUI from "./src/pages/homePage.js";
 import authRouter from "./src/routes/auth.routes.js";
@@ -55,6 +56,7 @@ app.use("/api/v4", checkoutRouter);
 app.use("/api/v5", contactRouter);
 app.use("/api/admin/auth", adminAuthRouter);
 app.use("/api/admin", adminUserRouter);
+app.use("/api/admin", adminOrderRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 
