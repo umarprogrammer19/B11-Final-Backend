@@ -1,19 +1,19 @@
-import ordersModels from "../../models/orders.models.js";
+import furniroModels from "../../models/furniro.models.js";
 
 export const getAllOrders = async (req, res) => {
     try {
         const page = parseInt(req.query.page, 10) || 1;
         const limit = parseInt(req.query.limit, 10) || 10;
         const skip = (page - 1) * limit;
-        const orders = await ordersModels.find()
+        const orders = await furniroModels.find()
             .skip(skip)
             .limit(limit);
 
-        const totalOrders = await ordersModels.countDocuments();
+        const totalOrders = await furniroModels.countDocuments();
         res.status(200).json({
             message: "Order Retrives Successfully",
             currentPage: page,
-            totalPages: Math.ceil(totalUsers / limit),
+            totalPages: Math.ceil(totalOrders / limit),
             totalOrders,
             orders,
         });
