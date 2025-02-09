@@ -24,7 +24,7 @@ const fetchSanityData = async () => {
 
     try {
         const response = await axios.get(sanityApiUrl);
-        return response.data.result; 
+        return response.data.result;
     } catch (error) {
         console.error("Error fetching Sanity data:", error);
         return [];
@@ -57,8 +57,9 @@ const processAndSaveProducts = async () => {
             const newProduct = new Product({
                 title: product.title,
                 description: product.description,
-                imageUrl: cloudinaryUrl, // Use Cloudinary URL instead of Sanity URL
+                imageUrl: cloudinaryUrl,
                 price: product.price,
+                stock: Math.floor(Math.random() * 101),
                 category: product.category,
                 tags: product.tags || [],
                 discountPercentage: product.dicountPercentage || 0,
