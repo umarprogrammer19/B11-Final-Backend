@@ -36,7 +36,8 @@ const productSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ["chair", "sofa", "light", "bed", "table", "items"]
+        enum: ["chair", "sofa", "light", "bed", "table", "items"],
+        default: "items"
     }
 }, { timestamps: true });
 
