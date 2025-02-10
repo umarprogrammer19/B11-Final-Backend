@@ -1,7 +1,8 @@
 import express from "express";
+import { authenticateAdmin } from "../admin/middleware/admin.middleware.js";
+import { createOrderFromFurniro, getOrdersFromFurniro } from "../controllers/furniro.controllers.js";
 import { createOrder, getOneOrder, getOrders } from "../controllers/orders.controllers.js";
 import { authenticate } from "../middleware/userRef.middleware.js";
-import { createOrderFromFurniro, getOrdersFromFurniro } from "../controllers/furniro.controllers.js";
 
 const router = express.Router();
 
@@ -289,7 +290,7 @@ router.get("/orders", authenticate, getOrders);
  *                   example: Internal server error
  */
 
-router.get("/furniro-orders", authenticate, getOrdersFromFurniro);
+router.get("/furniro-orders", authenticateAdmin, getOrdersFromFurniro);
 
 /**
  * @swagger
