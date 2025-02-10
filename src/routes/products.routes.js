@@ -1,7 +1,7 @@
 import express from "express";
+import { authenticateAdmin } from "../admin/middleware/admin.middleware.js";
 import { addProduct, deleteProduct, getProducts, getSingleProduct, updateProduct } from "../controllers/product.controllers.js";
 import { upload } from "../middleware/multer.middleware.js";
-import { authenticate } from "../middleware/userRef.middleware.js";
 
 const router = express.Router();
 
@@ -52,7 +52,7 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized
  */
-router.post("/addProducts", authenticate, upload.single("image"), addProduct);
+router.post("/addProducts", authenticateAdmin, upload.single("image"), addProduct);
 
 /**
  * @swagger
@@ -150,7 +150,7 @@ router.get("/products/:id", getSingleProduct);
  *       404:
  *         description: Product not found
  */
-router.put("/updateProduct/:id", authenticate, upload.single("image"), updateProduct);
+router.put("/updateProduct/:id", authenticateAdmin, upload.single("image"), updateProduct);
 
 /**
  * @swagger
@@ -179,6 +179,6 @@ router.put("/updateProduct/:id", authenticate, upload.single("image"), updatePro
  *       404:
  *         description: Product not found
  */
-router.delete("/deleteProduct/:id", authenticate, deleteProduct);
+router.delete("/deleteProduct/:id", authenticateAdmin, deleteProduct);
 
 export default router;
