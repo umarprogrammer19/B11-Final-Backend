@@ -22,3 +22,30 @@ export const getAllOrders = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const updateStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!req.user) return res.status(401).json({ message: "Please Login First" });
+
+        // Validate status
+        const validStatuses = ["pending", "completed", "shipped"];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: "Invalid status value" });
+        }
+
+        // Find order
+        const order = await furniroModels.findById(id);
+        if (!order) return res.status(404).json({ message: "Order not found" });
+
+        order.status = status;
+        await order.save();
+
+        return res.status(200).json({ message: "Order status updated successfully", order });
+    } catch (error) {
+        console.error("Error updating order status:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
