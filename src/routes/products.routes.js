@@ -150,7 +150,7 @@ router.get("/products/:id", getSingleProduct);
  *       404:
  *         description: Product not found
  */
-router.put("/updateProduct/:id", authenticateAdmin, upload.single("image"), updateProduct);
+router.patch("/updateProduct/:id", authenticateAdmin, upload.single("image"), updateProduct);
 
 /**
  * @swagger
