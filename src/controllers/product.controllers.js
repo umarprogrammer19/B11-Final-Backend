@@ -63,38 +63,42 @@ export const getSingleProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { title, description, price } = req.body;
 
-    if (!id) return res.status(400).json({ message: "id is required" });
+    if (!id) return res.status(400).json({ message: "Product ID is required" });
     if (!req.user) return res.status(401).json({ message: "Login First" });
 
     try {
-        let image;
+        let imageUrl;
         if (req.file) {
-            image = await uploadImageToCloudinary(req.file.path);
-            if (!image) return res.status(404).json({ message: "Image Error" });
+            imageUrl = await uploadImageToCloudinary(req.file.path);
+            if (!imageUrl) return res.status(400).json({ message: "Image upload failed" });
         }
+
         const product = await productsModels.findById(id);
         if (!product) return res.status(404).json({ message: "Product not found" });
 
-        // Check if the logged-in user is the owner of the product
-        if (product.userRef.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: "You are not authorized to update this product" });
-        }
+        const updatedFields = {
+            title: req.body.title || product.title,
+            description: req.body.description || product.description,
+            price: req.body.price || product.price,
+            stock: req.body.stock || product.stock,
+            tags: req.body.tags ? req.body.tags.split(",") : product.tags, 
+            discountPercentage: req.body.discountPercentage || product.discountPercentage,
+            isNew: req.body.isNew !== undefined ? req.body.isNew : product.isNew, 
+            category: req.body.category || product.category,
+            imageUrl: imageUrl || product.imageUrl,
+        };
 
-        // Update the product fields
-        product.title = title || product.title;
-        product.description = description || product.description;
-        product.price = price || product.price;
-        product.imageURL = image || product.imageURL;
-
+        Object.assign(product, updatedFields);
         await product.save();
+
         res.status(200).json({ message: "Product updated successfully", product });
     } catch (error) {
         console.error("Error occurred:", error);
-        res.status(500).json({ message: "An error occurred" });
+        res.status(500).json({ message: "An error occurred while updating the product" });
     }
 };
+
 
 export const deleteProduct = async (req, res) => {
     const { id } = req.params;
