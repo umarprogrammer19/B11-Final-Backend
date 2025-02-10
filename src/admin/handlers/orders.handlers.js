@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import furniroModels from "../../models/furniro.models.js";
 
 export const getAllOrders = async (req, res) => {
@@ -47,5 +48,23 @@ export const updateStatus = async (req, res) => {
     } catch (error) {
         console.error("Error updating order status:", error);
         return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+export const deleteOrder = async (req, res) => {
+    const { id } = req.params;
+    if (!id) return res.status(400).json({ message: "Id is Missing" });
+    if (!req.user) return res.status(400).json({ message: "Please Login First" });
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({ message: "Invalid Id" });
+
+    try {
+        const isOrder = furniroModels.findById(id);
+        if (!isOrder) res.status(404).json({ message: "Order Not Found" });
+
+        const order = await furniroModels.findByIdAndDelete(id);
+        res.status(200).json({ message: "Order deleted successfully", order });
+    } catch (error) {
+        console.error("Error occurred:", error);
+        res.status(500).json({ message: "An error occurred" });
     }
 }

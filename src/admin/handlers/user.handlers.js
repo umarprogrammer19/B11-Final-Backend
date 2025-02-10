@@ -37,7 +37,7 @@ export const deleteUser = async (req, res) => {
         if (!isUser) res.status(404).json({ message: "User Not Found" });
 
         const user = await usersModels.findByIdAndDelete(id);
-        res.status(200).json({ message: "Product deleted successfully", user });
+        res.status(200).json({ message: "User deleted successfully", user });
     } catch (error) {
         console.error("Error occurred:", error);
         res.status(500).json({ message: "An error occurred" });
