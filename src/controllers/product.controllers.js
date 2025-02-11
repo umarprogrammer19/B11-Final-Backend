@@ -4,26 +4,43 @@ import { uploadImageToCloudinary } from "../utils/cloudinary.js";
 dotenv.config();
 
 export const addProduct = async (req, res) => {
-    const { title, description, price } = req.body;
+    const { title, description, price, stock, tags, discountPercentage, isNew, category } = req.body;
 
-    // Validate the input
+    // Validate required fields
     if (!title) return res.status(400).json({ message: "Title is required" });
     if (!description) return res.status(400).json({ message: "Description is required" });
     if (!price) return res.status(400).json({ message: "Price is required" });
+    if (!stock) return res.status(400).json({ message: "Stock is required" });
+    if (!category) return res.status(400).json({ message: "Category is required" });
     if (!req.file) return res.status(400).json({ message: "Please upload an image" });
     if (!req.user) return res.status(401).json({ message: "Login First" });
+
     try {
-        const imageURL = await uploadImageToCloudinary(req.file.path);
-        if (!imageURL) {
-            return res.status(500).json({ message: "Error uploading the image" });
-        }
-        await productsModels.create({ title, description, price, imageURL, userRef: req.user._id });
-        res.status(201).json({ message: "Product added successfully" });
+        // Upload image to Cloudinary
+        const imageUrl = await uploadImageToCloudinary(req.file.path);
+        if (!imageUrl) return res.status(500).json({ message: "Error uploading the image" });
+
+        // Create new product
+        const newProduct = await productsModels.create({
+            title,
+            description,
+            price,
+            stock,
+            tags: tags ? tags.split(",") : [],
+            discountPercentage: discountPercentage || 0,
+            isNew: isNew || false,
+            category,
+            imageUrl,
+            userRef: req.user._id,
+        });
+
+        res.status(201).json({ message: "Product added successfully", product: newProduct });
     } catch (error) {
         console.error("Error occurred:", error);
-        res.status(500).json({ message: "An error occurred" });
+        res.status(500).json({ message: "An error occurred while adding the product" });
     }
 };
+
 
 export const getProducts = async (req, res) => {
     try {
@@ -82,9 +99,9 @@ export const updateProduct = async (req, res) => {
             description: req.body.description || product.description,
             price: req.body.price || product.price,
             stock: req.body.stock || product.stock,
-            tags: req.body.tags ? req.body.tags.split(",") : product.tags, 
+            tags: req.body.tags ? req.body.tags.split(",") : product.tags,
             discountPercentage: req.body.discountPercentage || product.discountPercentage,
-            isNew: req.body.isNew !== undefined ? req.body.isNew : product.isNew, 
+            isNew: req.body.isNew !== undefined ? req.body.isNew : product.isNew,
             category: req.body.category || product.category,
             imageUrl: imageUrl || product.imageUrl,
         };
