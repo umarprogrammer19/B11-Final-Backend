@@ -22,6 +22,7 @@ const allowedOrigins = [
     "https://ui-ux-hackathon-foodtuck-website.vercel.app",
     "https://uf-food-tuck.vercel.app",
     "https://api-admin-furniro.vercel.app",
+    "https://uf-agentia-world.vercel.app",
     "http://localhost:3000"
 ];
 
