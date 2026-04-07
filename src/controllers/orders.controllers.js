@@ -66,6 +66,28 @@ export const createOrderAfterPayment = async (req, res) => {
             return res.status(400).json({ error: "Invalid total price" });
         }
 
+        // Reduce stock for each product in the order
+        for (const orderProduct of products) {
+            // Find product by name (since we're receiving name/price/quantity from frontend)
+            const product = await productsModels.findOne({ 
+                title: orderProduct.name,
+                price: orderProduct.price 
+            });
+
+            if (product) {
+                // Check if there's enough stock
+                if (product.stock < orderProduct.quantity) {
+                    return res.status(400).json({ 
+                        error: `Insufficient stock for ${product.title}. Available: ${product.stock}` 
+                    });
+                }
+
+                // Reduce the stock
+                product.stock -= orderProduct.quantity;
+                await product.save();
+            }
+        }
+
         // Save the order with the products array
         const newOrder = new furniroModels({
             user: userId,
