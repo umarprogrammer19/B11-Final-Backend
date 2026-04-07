@@ -1,7 +1,7 @@
 import express from "express";
 import { authenticateAdmin } from "../admin/middleware/admin.middleware.js";
 import { createOrderFromFurniro, getOrdersFromFurniro } from "../controllers/furniro.controllers.js";
-import { createOrder, getOneOrder, getOrders } from "../controllers/orders.controllers.js";
+import { createOrder, createOrderAfterPayment, getOneOrder, getOrders, getUserOrders } from "../controllers/orders.controllers.js";
 import { authenticate } from "../middleware/userRef.middleware.js";
 
 const router = express.Router();
@@ -322,5 +322,73 @@ router.get("/furniro-orders", authenticateAdmin, getOrdersFromFurniro);
  *         description: Internal server error.
  */
 router.get("/orders/:id", getOneOrder);
+
+/**
+ * @swagger
+ * /api/v3/create-payment-order:
+ *   post:
+ *     summary: Create order after successful payment
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - products
+ *               - totalPrice
+ *             properties:
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       example: Chair
+ *                     price:
+ *                       type: number
+ *                       example: 2500
+ *                     quantity:
+ *                       type: number
+ *                       example: 2
+ *               totalPrice:
+ *                 type: number
+ *                 example: 5000
+ *               sessionId:
+ *                 type: string
+ *                 example: cs_test_a1b2c3d4e5f6g7h8i9j0
+ *     responses:
+ *       201:
+ *         description: Order placed successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.post("/create-payment-order", authenticate, createOrderAfterPayment);
+
+/**
+ * @swagger
+ * /api/v3/user-orders:
+ *   get:
+ *     summary: Get current user's orders
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Orders retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/user-orders", authenticate, getUserOrders);
 
 export default router;

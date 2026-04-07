@@ -1,5 +1,4 @@
 import Stripe from "stripe";
-import { createOrderFromFurniro } from "../utils/order.js";
 
 // BAse URL For Production And Deployment
 const BASE_URL = process.env.NODE_ENV === "production" ? "https://uf-furniro-store.vercel.app" || "https://ui-ux-hackathon-foodtuck-website.vercel.app" || "https://uf-food-tuck.vercel.app" : "http://localhost:3000";
@@ -14,7 +13,6 @@ export const checkout = async (req, res) => {
 
         if (!req.user) return res.status(400).json({ message: "Unauthorized" });
 
-        const userId = req.user._id
         // Validate the products array
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({ error: "Invalid or empty products array" });
@@ -43,12 +41,16 @@ export const checkout = async (req, res) => {
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: `${BASE_URL}/payment/success`,
+            success_url: `${BASE_URL}/payment/success?success=true`,
             cancel_url: `${BASE_URL}/payment/cancel`,
+            metadata: {
+                userId: req.user._id.toString(),
+                products: JSON.stringify(products),
+                totalPrice: totalPrice.toString(),
+            },
         });
 
-        const orderRes = await createOrderFromFurniro(products, totalPrice, userId);
-        res.status(200).json({ id: session.id, orderRes });
+        res.status(200).json({ id: session.id });
     } catch (error) {
         console.error("Stripe checkout error:", error.message);
         res.status(500).json({ error: "Failed to create checkout session", details: error.message });
