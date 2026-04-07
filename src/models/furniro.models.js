@@ -24,6 +24,10 @@ const furniroOrders = new mongoose.Schema({
         enum: ['pending', 'completed', 'shipped'],
         default: 'pending',
     },
+    stripeSessionId: {
+        type: String,
+        default: null,
+    },
 }, {
     timestamps: true,
 });
